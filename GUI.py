@@ -190,7 +190,7 @@ class InterfaceApp(QMainWindow):
         # Cria um QFrame para o retângulo preto semi-transparente
         frame = QFrame()
         frame.setStyleSheet("""
-            background-color: rgba(0, 0, 0, 150);  /* Preto com 60% de opacidade */
+            background-color: rgba(0, 0, 0, 50);  /* Preto com 60% de opacidade */
             border-radius: 15px;
         """)
         frame.setFixedSize(400, 300)  # Tamanho do retângulo
@@ -213,10 +213,12 @@ class InterfaceApp(QMainWindow):
         self.nome_entry = QLineEdit()
         self.nome_entry.setPlaceholderText("Nome")
         self.nome_entry.setStyleSheet("""
-            background-color: white;
-            color: black;
-            border-radius: 5px;
-            padding: 10px;
+            background-color: rgba(255, 255, 255, 80);  
+            color: white;  
+            border: 1px solid white;  
+            border-radius: 5px; 
+            padding: 10px; 
+            font-weight: bold;
         """)
         frame_layout.addWidget(self.nome_entry)
 
@@ -224,10 +226,12 @@ class InterfaceApp(QMainWindow):
         self.email_cadastro_entry = QLineEdit()
         self.email_cadastro_entry.setPlaceholderText("Email")
         self.email_cadastro_entry.setStyleSheet("""
-            background-color: white;
-            color: black;
-            border-radius: 5px;
-            padding: 10px;
+            background-color: rgba(255, 255, 255, 80);  
+            color: white;  
+            border: 1px solid white;  
+            border-radius: 5px; 
+            padding: 10px; 
+            font-weight: bold;
         """)
         frame_layout.addWidget(self.email_cadastro_entry)
 
@@ -236,10 +240,12 @@ class InterfaceApp(QMainWindow):
         self.senha_cadastro_entry.setPlaceholderText("Senha")
         self.senha_cadastro_entry.setEchoMode(QLineEdit.Password)
         self.senha_cadastro_entry.setStyleSheet("""
-            background-color: white;
-            color: black;
-            border-radius: 5px;
-            padding: 10px;
+            background-color: rgba(255, 255, 255, 80);  
+            color: white;  
+            border: 1px solid white;  
+            border-radius: 5px; 
+            padding: 10px; 
+            font-weight: bold;
         """)
         frame_layout.addWidget(self.senha_cadastro_entry)
 
@@ -247,14 +253,17 @@ class InterfaceApp(QMainWindow):
         confirmar_button = QPushButton("Confirmar")
         confirmar_button.setStyleSheet("""
             QPushButton {
-                background-color: black;
-                color: white;
-                border-radius: 5px;
-                padding: 10px;
-                font-size: 16px;
+                background-color: rgba(0, 0, 0, 60);  
+                color: white; 
+                border-radius: 5px; 
+                padding: 10px; 
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: rgba(0, 0, 0, 120);  /* Opacidade aumentada ao passar o mouse */
             }
             QPushButton:pressed {
-                background-color: rgba(0, 0, 0, 100);  /* Preto com 40% de opacidade */
+                background-color: rgba(0, 0, 0, 240);  
             }
         """)
         confirmar_button.clicked.connect(self.confirmar_cadastro)
@@ -264,14 +273,17 @@ class InterfaceApp(QMainWindow):
         voltar_button = QPushButton("Voltar")
         voltar_button.setStyleSheet("""
             QPushButton {
-                background-color: black;
-                color: white;
-                border-radius: 5px;
-                padding: 10px;
-                font-size: 16px;
+                background-color: rgba(0, 0, 0, 60);  
+                color: white; 
+                border-radius: 5px; 
+                padding: 10px; 
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: rgba(0, 0, 0, 120);  /* Opacidade aumentada ao passar o mouse */
             }
             QPushButton:pressed {
-                background-color: rgba(0, 0, 0, 100);  /* Preto com 40% de opacidade */
+                background-color: rgba(0, 0, 0, 240);  
             }
         """)
         voltar_button.clicked.connect(self.show_login_screen)
