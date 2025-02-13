@@ -35,34 +35,69 @@ class IntermediaryManager:
                 "Erro ao carregar o modelo SentenceTransformer: %s", str(e))
             raise
 
+
+
+
     def calcular_desempenho(self, id_usuario):
-        print("Processando def sugerir_questao...", id_usuario)
+        print("Processando def calcular_desempenho...", id_usuario)
         """Calcula o desempenho do usuário com base no histórico."""
         historico = self.historico_dao.get_historico_by_usuario(id_usuario)
-        for h in historico:
-            print(
-                f"id_historico: {h.id_historico}, acerto: {h.acerto}, erro: {h.erro}")
         if not historico:
             return f"Usuário {id_usuario} ainda não respondeu nenhuma questão."
 
+        # Cálculo do desempenho geral
         total_acertos = sum(1 for h in historico if h.acerto == 1)
         total_erros = sum(1 for h in historico if h.erro == 1)
-        print("total_acertos...", total_acertos)
-        print("total_erros...", total_erros)
         total_respostas = total_acertos + total_erros
-        porcentagem_acertos = (total_acertos / total_respostas) * 100
+        porcentagem_acertos = (total_acertos / total_respostas) * 100 if total_respostas > 0 else 0
 
+        # Classificação geral
         if porcentagem_acertos >= 80:
             classificacao = "Bom"
         elif 50 <= porcentagem_acertos < 80:
             classificacao = "Médio"
         else:
             classificacao = "Ruim"
-        nomme = self.usuario_dao.get_user_by_id(id_usuario)
-        return (f"Desempenho do Usuário {nomme.nome}:\n"
-                f"- Total de Respostas: {total_respostas}\n"
-                f"- Acertos: {total_acertos} ({porcentagem_acertos:.2f}%)\n"
-                f"- Classificação: {classificacao}")
+
+        # Cálculo do desempenho por área
+        desempenho_por_area = {}
+        for h in historico:
+            if h.area not in desempenho_por_area:
+                desempenho_por_area[h.area] = {"acertos": 0, "erros": 0}
+            if h.acerto == 1:
+                desempenho_por_area[h.area]["acertos"] += 1
+            else:
+                desempenho_por_area[h.area]["erros"] += 1
+
+        # Calcula a porcentagem de acertos por área
+        for area, dados in desempenho_por_area.items():
+            total_area = dados["acertos"] + dados["erros"]
+            porcentagem_acertos_area = (dados["acertos"] / total_area) * 100 if total_area > 0 else 0
+            desempenho_por_area[area]["porcentagem_acertos"] = porcentagem_acertos_area
+
+        # Encontra a área com melhor e pior desempenho
+        melhor_area = max(desempenho_por_area.items(), key=lambda x: x[1]["porcentagem_acertos"], default=None)
+        pior_area = min(desempenho_por_area.items(), key=lambda x: x[1]["porcentagem_acertos"], default=None)
+
+        # Formata a mensagem de desempenho
+        nome_usuario = self.usuario_dao.get_user_by_id(id_usuario).nome
+        mensagem = (
+            f"Desempenho do Usuário {nome_usuario}:\n"
+            f"- Total de Respostas: {total_respostas}\n"
+            f"- Acertos: {total_acertos} ({porcentagem_acertos:.2f}%)\n"
+            f"- Classificação Geral: {classificacao}\n"
+        )
+
+        # Adiciona informações sobre as áreas de conhecimento
+        if melhor_area and pior_area:
+            mensagem += (
+                f"\nÁreas de Conhecimento:\n"
+                f"- Melhor Desempenho: {melhor_area[0]} ({melhor_area[1]['porcentagem_acertos']:.2f}% de acertos)\n"
+                f"- Pior Desempenho: {pior_area[0]} ({pior_area[1]['porcentagem_acertos']:.2f}% de acertos)\n"
+            )
+
+        return mensagem
+
 
     def gerar_embeddings(self, sentences):
         """Gera embeddings para uma lista de sentenças."""
@@ -158,14 +193,13 @@ class IntermediaryManager:
             print(f"Erro durante o cálculo de similaridade: {e}")
             return None, f"Erro ao calcular similaridade: {e}"
 
-    def registrar_resposta(self, id_usuario, id_questao,
-                           acerto_erro, tempo_resposta=None):
-
+    def registrar_resposta(self, id_usuario, id_questao, acerto_erro, hora_atual, area_questao):
         erro = 1 - acerto_erro
-        print("def registrar_resposta...", id_usuario,
-              id_questao, acerto_erro, tempo_resposta, erro)
+        print("def registrar_resposta...", id_usuario, id_questao, acerto_erro, hora_atual, erro)
         self.historico_dao.add_historico(
-            id_usuario, id_questao, acerto_erro, tempo_resposta, erro)
+            id_usuario, id_questao, acerto_erro, hora_atual, erro, area_questao
+        )
+
 
     def adicionar_usuario(self, nome, email, senha):
         """Adiciona um novo usuário."""
@@ -193,19 +227,19 @@ class IntermediaryManager:
         """
         Sugere uma questão similar com base na área e no embedding da questão errada.
         """
-        print(" 1. Obter o embedding da questão errada...")
+        #print(" 1. Obter o embedding da questão errada...")
         # 1. Obter o embedding da questão errada
         questao_errada_embedding = self.embedding_dao.get_embedding_by_questao(
             id_questao_atual)
         if questao_errada_embedding is None:
             return None, "Embedding da questão atual não encontrado."
 
-        print("2. Obter embeddings das questões da mesma área...")
+        #print("2. Obter embeddings das questões da mesma área...")
         # 2. Obter embeddings das questões da mesma área
         embeddings_data = self.embedding_dao.get_embeddings_by_area(
             area_errada)
 
-        print("3. Filtrar questões já sugeridas e a questão atual...")
+        #print("3. Filtrar questões já sugeridas e a questão atual...")
         # 3. Filtrar questões já sugeridas e a questão atual
         questoes_a_excluir = {id_questao_atual} | set(questoes_sugeridas)
 
@@ -218,7 +252,7 @@ class IntermediaryManager:
             if embedding.id_questao not in questoes_a_excluir
         ]
 
-        print("# 4. Preparar os embeddings para cálculo de similaridade...")
+        #print("# 4. Preparar os embeddings para cálculo de similaridade...")
         # 5. Preparar os embeddings para cálculo de similaridade
         embeddings_array = np.array(
             [embedding.vetor for embedding in embeddings_data]  # Já é um array NumPy
@@ -232,14 +266,14 @@ class IntermediaryManager:
        # """ print("Forma de questao_errada_tensor:", questao_errada_tensor.shape)
         # print("Forma de embeddings_tensor:", embeddings_tensor.shape)"""
 
-        print("5. Normalizar os embeddings...")
+        #print("5. Normalizar os embeddings...")
         # 6. Normalizar os embeddings
         questao_errada_tensor = torch.nn.functional.normalize(
             questao_errada_tensor, p=2, dim=1)
         embeddings_tensor = torch.nn.functional.normalize(
             embeddings_tensor, p=2, dim=1)
 
-        print("6. Calcular similaridade do cosseno...")
+        #print("6. Calcular similaridade do cosseno...")
 
         try:
             similaridades = torch.nn.functional.cosine_similarity(
@@ -248,20 +282,20 @@ class IntermediaryManager:
 
             print("Similaridades calculadas:", similaridades)
 
-            print("7. Encontrar a questão mais similar...")
+            #print("7. Encontrar a questão mais similar...")
 
             # 8. Encontrar a questão mais similar
             indice_mais_similar = similaridades.argmax().item()
             id_similar = embeddings_data[indice_mais_similar].id_questao
 
-            print("8. Recuperar a questão sugerida...")
+            print("8. Recuperar a questão sugerida...", id_similar)
 
             # 9. Recuperar a questão sugerida
             questao_sugerida = self.questao_dao.get_questao_by_id(id_similar)
             if not questao_sugerida:
                 return None, "Questão sugerida não encontrada."
 
-            print("return id_similar, questao_sugerida...")
+            #print("return id_similar, questao_sugerida...")
 
             return id_similar, questao_sugerida
 

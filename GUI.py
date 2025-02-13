@@ -16,7 +16,7 @@ from PyQt5.QtCore import Qt
 from PIL import Image
 from io import BytesIO
 from PyQt5.QtWidgets import QFrame
-
+from datetime import datetime
 
 class InterfaceApp(QMainWindow):
 
@@ -199,6 +199,28 @@ class InterfaceApp(QMainWindow):
         title.setAlignment(Qt.AlignCenter)
         layout.addWidget(title)
 
+        # Painel de resumo de desempenho
+        self.resumo_frame = QFrame()
+        self.resumo_frame.setStyleSheet("""
+            background-color: rgba(0, 0, 0, 60);  /* Preto com 60% de opacidade */
+            border-radius: 15px;
+            padding: 15px;
+        """)
+        self.resumo_frame.setFixedSize(400, 200)  # Tamanho do painel
+        resumo_layout = QVBoxLayout(self.resumo_frame)
+        resumo_layout.setAlignment(Qt.AlignCenter)
+
+        # Label para exibir o resumo de desempenho
+        self.resumo_label = QLabel()
+        self.resumo_label.setFont(QFont("Arial", 12))
+        self.resumo_label.setStyleSheet("""
+            color: white;
+        """)
+        self.resumo_label.setAlignment(Qt.AlignCenter)
+        resumo_layout.addWidget(self.resumo_label)
+
+        layout.addWidget(self.resumo_frame, alignment=Qt.AlignCenter)
+
         # Botão "Começar Quiz"
         comecar_button = QPushButton("Começar Quiz")
         comecar_button.setStyleSheet("""
@@ -217,9 +239,50 @@ class InterfaceApp(QMainWindow):
                 background-color: rgba(0, 0, 0, 240);  
             }
         """)
-        comecar_button.clicked.connect(
-            self.show_quiz_screen)  # Redireciona para a tela do quiz
+        comecar_button.clicked.connect(self.show_quiz_screen)  # Redireciona para a tela do quiz
         layout.addWidget(comecar_button)
+
+        # Botão "Ver Desempenho Completo"
+        desempenho_button = QPushButton("Ver Desempenho Completo")
+        desempenho_button.setStyleSheet("""
+            QPushButton {
+                background-color: rgba(0, 0, 0, 60);  
+                color: white; 
+                border-radius: 5px; 
+                padding: 10px; 
+                font-size: 16px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: rgba(0, 0, 0, 120);  /* Opacidade aumentada ao passar o mouse */
+            }
+            QPushButton:pressed {
+                background-color: rgba(0, 0, 0, 240);  
+            }
+        """)
+        desempenho_button.clicked.connect(self.show_desempenho_screen)  # Redireciona para a tela de desempenho
+        layout.addWidget(desempenho_button)
+
+        # Botão "Sair"
+        sair_button = QPushButton("Sair")
+        sair_button.setStyleSheet("""
+            QPushButton {
+                background-color: rgba(0, 0, 0, 60);  
+                color: white; 
+                border-radius: 5px; 
+                padding: 10px; 
+                font-size: 16px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: rgba(0, 0, 0, 120);  /* Opacidade aumentada ao passar o mouse */
+            }
+            QPushButton:pressed {
+                background-color: rgba(0, 0, 0, 240);  
+            }
+        """)
+        sair_button.clicked.connect(self.show_login_screen)  # Redireciona para a tela de login
+        layout.addWidget(sair_button)
 
         screen.setLayout(layout)
         return screen
@@ -392,11 +455,12 @@ class InterfaceApp(QMainWindow):
 
     def show_intermediate_screen(self):
         """Mostra a tela intermediária após o login."""
+        print("idddddddddddddddddddddddddddd...",self.id_usuario)
         self.stacked_widget.setCurrentIndex(1)  # Índice da tela intermediária
 
     def show_cadastro_screen(self):
         """Mostra a tela de cadastro."""
-        self.stacked_widget.setCurrentIndex(2)
+        self.stacked_widget.setCurrentIndex(3)
 
     def show_quiz_screen(self):
         """Mostra a tela do quiz."""
@@ -405,7 +469,7 @@ class InterfaceApp(QMainWindow):
 
     def show_desempenho_screen(self):
         """Mostra a tela de desempenho."""
-        self.stacked_widget.setCurrentIndex(3)
+        self.stacked_widget.setCurrentIndex(4)
 
     def verificar_autenticacao(self):
         """Verifica se o usuário está autenticado."""
@@ -413,7 +477,7 @@ class InterfaceApp(QMainWindow):
         senha = self.senha_entry.text()
         self.id_usuario = self.intermediary_manager.autenticar_usuario(
             email, senha)
-
+        print("idddddddddddddddddddddddddddddddddddddddddddddd...",self.id_usuario)
         if self.id_usuario:
             self.show_intermediate_screen()  # Redireciona para a tela intermediária
         else:
@@ -488,10 +552,18 @@ class InterfaceApp(QMainWindow):
             selected_option_normalized = selected_option.strip().lower()
 
             acerto_erro = 1 if selected_option_normalized == resposta_correta else 0
+            hora_atual = datetime.now()  # Data e hora atuais
+            area_questao = self.current_question.area
+
 
             self.intermediary_manager.registrar_resposta(
-                self.id_usuario, self.current_question.id_questao, acerto_erro
+                self.id_usuario,
+                self.current_question.id_questao,
+                acerto_erro,
+                hora_atual,
+                area_questao
             )
+
 
             if acerto_erro:
                 QMessageBox.information(self, "Resposta", "Correto!")
@@ -514,3 +586,19 @@ class InterfaceApp(QMainWindow):
 
         self.desempenho_label.setText(desempenho)
         self.show_desempenho_screen()
+
+    def atualizar_resumo_desempenho(self):
+        """Atualiza o resumo de desempenho na tela intermediária."""
+        if hasattr(self, 'resumo_label'):  # Verifica se o resumo_label já foi criado
+            if self.id_usuario:
+                # Calcula o desempenho do usuário
+                desempenho = self.intermediary_manager.calcular_desempenho(self.id_usuario)
+                self.resumo_label.setText(desempenho)
+            else:
+                self.resumo_label.setText("Usuário não autenticado.")
+
+    def showEvent(self, event):
+        """Atualiza o painel de resumo de desempenho sempre que a tela intermediária é exibida."""
+        super().showEvent(event)
+        if self.stacked_widget.currentIndex() == 1:  # Verifica se a tela intermediária está ativa
+            self.atualizar_resumo_desempenho()

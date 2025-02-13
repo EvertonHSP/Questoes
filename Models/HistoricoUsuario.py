@@ -1,12 +1,14 @@
+
+
 class HistoricoUsuario:
-    def __init__(self, id_usuario,
-                 id_questao, acerto, tempo_resposta, erro, id_historico):
+    def __init__(self, id_usuario, id_questao, acerto, dataTime, erro, id_historico, area):
         self._id_historico = id_historico
         self._id_usuario = id_usuario
         self._id_questao = id_questao
         self._acerto = acerto
-        self._tempo_resposta = tempo_resposta
+        self._dataTime = dataTime  # Renomeado de tempo_resposta para dataTime
         self._erro = erro
+        self._area = area  # Nova coluna: área da questão
 
     # Getters
     @property
@@ -26,12 +28,16 @@ class HistoricoUsuario:
         return self._acerto
 
     @property
-    def tempo_resposta(self):
-        return self._tempo_resposta
+    def dataTime(self):
+        return self._dataTime
 
     @property
     def erro(self):
         return self._erro
+
+    @property
+    def area(self):
+        return self._area
 
     # Setters
     @id_usuario.setter
@@ -46,10 +52,14 @@ class HistoricoUsuario:
     def acerto(self, acerto):
         self._acerto = acerto
 
-    @tempo_resposta.setter
-    def tempo_resposta(self, tempo_resposta):
-        self._tempo_resposta = tempo_resposta
+    @dataTime.setter
+    def dataTime(self, dataTime):
+        self._dataTime = dataTime
 
     @erro.setter
     def erro(self, erro):
         self._erro = erro
+
+    @area.setter
+    def area(self, area):
+        self._area = area
