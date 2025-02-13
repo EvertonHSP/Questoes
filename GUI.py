@@ -1,6 +1,4 @@
-import sys
 from PyQt5.QtWidgets import (
-    QApplication,
     QMainWindow,
     QWidget,
     QVBoxLayout,
@@ -44,6 +42,10 @@ class InterfaceApp(QMainWindow):
         # Tela de login
         self.login_screen = self.create_login_screen()
         self.stacked_widget.addWidget(self.login_screen)
+
+        # Tela intermediária
+        self.intermediate_screen = self.create_intermediate_screen()
+        self.stacked_widget.addWidget(self.intermediate_screen)
 
         # Tela principal do quiz
         self.quiz_screen = self.create_quiz_screen()
@@ -180,6 +182,46 @@ class InterfaceApp(QMainWindow):
         # Adiciona o frame ao layout da tela
         screen_layout.addWidget(frame, 0, 0, alignment=Qt.AlignCenter)
 
+        return screen
+
+    def create_intermediate_screen(self):
+        """Cria a tela intermediária após o login."""
+        screen = QWidget()
+        layout = QVBoxLayout()
+
+        # Título
+        title = QLabel("Bem-vindo ao Quiz!")
+        title.setFont(QFont("Arial", 18, QFont.Bold))
+        title.setStyleSheet("""
+            color: white;
+            padding: 10px;
+        """)
+        title.setAlignment(Qt.AlignCenter)
+        layout.addWidget(title)
+
+        # Botão "Começar Quiz"
+        comecar_button = QPushButton("Começar Quiz")
+        comecar_button.setStyleSheet("""
+            QPushButton {
+                background-color: rgba(0, 0, 0, 60);  
+                color: white; 
+                border-radius: 5px; 
+                padding: 10px; 
+                font-size: 16px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: rgba(0, 0, 0, 120);  /* Opacidade aumentada ao passar o mouse */
+            }
+            QPushButton:pressed {
+                background-color: rgba(0, 0, 0, 240);  
+            }
+        """)
+        comecar_button.clicked.connect(
+            self.show_quiz_screen)  # Redireciona para a tela do quiz
+        layout.addWidget(comecar_button)
+
+        screen.setLayout(layout)
         return screen
 
     def create_cadastro_screen(self):
@@ -348,13 +390,18 @@ class InterfaceApp(QMainWindow):
         """Mostra a tela de login."""
         self.stacked_widget.setCurrentIndex(0)
 
+    def show_intermediate_screen(self):
+        """Mostra a tela intermediária após o login."""
+        self.stacked_widget.setCurrentIndex(1)  # Índice da tela intermediária
+
     def show_cadastro_screen(self):
         """Mostra a tela de cadastro."""
         self.stacked_widget.setCurrentIndex(2)
 
     def show_quiz_screen(self):
         """Mostra a tela do quiz."""
-        self.stacked_widget.setCurrentIndex(1)
+        self.stacked_widget.setCurrentIndex(2)  # Índice da tela do quiz
+        self.iniciar_quiz()
 
     def show_desempenho_screen(self):
         """Mostra a tela de desempenho."""
@@ -368,8 +415,7 @@ class InterfaceApp(QMainWindow):
             email, senha)
 
         if self.id_usuario:
-            self.show_quiz_screen()
-            self.iniciar_quiz()
+            self.show_intermediate_screen()  # Redireciona para a tela intermediária
         else:
             QMessageBox.critical(self, "Erro", "Email ou senha incorretos.")
 
