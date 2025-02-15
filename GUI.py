@@ -18,6 +18,7 @@ from io import BytesIO
 from PyQt5.QtWidgets import QFrame
 from datetime import datetime
 
+
 class InterfaceApp(QMainWindow):
 
     def __init__(self, intermediary_manager):
@@ -116,12 +117,12 @@ class InterfaceApp(QMainWindow):
         self.email_entry = QLineEdit()
         self.email_entry.setPlaceholderText("Email")
         self.email_entry.setStyleSheet("""
-            background-color: rgba(255, 255, 255, 80);  
-            color: white;  
-            border: 1px solid white;  
-            border-radius: 5px; 
-            padding: 10px; 
-            font-weight: bold;  
+            background-color: rgba(255, 255, 255, 80);
+            color: white;
+            border: 1px solid white;
+            border-radius: 5px;
+            padding: 10px;
+            font-weight: bold;
         """)
         frame_layout.addWidget(self.email_entry)
 
@@ -130,12 +131,12 @@ class InterfaceApp(QMainWindow):
         self.senha_entry.setPlaceholderText("Senha")
         self.senha_entry.setEchoMode(QLineEdit.Password)
         self.senha_entry.setStyleSheet("""
-            background-color: rgba(255, 255, 255, 80);  
-            color: white;  
-            border: 1px solid white;  
-            border-radius: 5px; 
-            padding: 10px; 
-            font-weight: bold;  
+            background-color: rgba(255, 255, 255, 80);
+            color: white;
+            border: 1px solid white;
+            border-radius: 5px;
+            padding: 10px;
+            font-weight: bold;
         """)
         frame_layout.addWidget(self.senha_entry)
 
@@ -143,17 +144,17 @@ class InterfaceApp(QMainWindow):
         entrar_button = QPushButton("Entrar")
         entrar_button.setStyleSheet("""
             QPushButton {
-                background-color: rgba(0, 0, 0, 60);  
-                color: white;   
-                border-radius: 5px; 
-                padding: 10px; 
+                background-color: rgba(0, 0, 0, 60);
+                color: white;
+                border-radius: 5px;
+                padding: 10px;
                 font-weight: bold;
             }
             QPushButton:hover {
                 background-color: rgba(0, 0, 0, 120);  /* Opacidade aumentada ao passar o mouse */
-            }                        
+            }
             QPushButton:pressed {
-                background-color: rgba(0, 0, 0, 240);  
+                background-color: rgba(0, 0, 0, 240);
             }
         """)
         entrar_button.clicked.connect(self.verificar_autenticacao)
@@ -163,17 +164,17 @@ class InterfaceApp(QMainWindow):
         cadastro_button = QPushButton("Criar Cadastro")
         cadastro_button.setStyleSheet("""
             QPushButton {
-                background-color: rgba(0, 0, 0, 60);  
-                color: white; 
-                border-radius: 5px; 
-                padding: 10px; 
+                background-color: rgba(0, 0, 0, 60);
+                color: white;
+                border-radius: 5px;
+                padding: 10px;
                 font-weight: bold;
             }
             QPushButton:hover {
                 background-color: rgba(0, 0, 0, 120);  /* Opacidade aumentada ao passar o mouse */
             }
             QPushButton:pressed {
-                background-color: rgba(0, 0, 0, 240);  
+                background-color: rgba(0, 0, 0, 240);
             }
         """)
         cadastro_button.clicked.connect(self.show_cadastro_screen)
@@ -225,10 +226,10 @@ class InterfaceApp(QMainWindow):
         comecar_button = QPushButton("Começar Quiz")
         comecar_button.setStyleSheet("""
             QPushButton {
-                background-color: rgba(0, 0, 0, 60);  
-                color: white; 
-                border-radius: 5px; 
-                padding: 10px; 
+                background-color: rgba(0, 0, 0, 60);
+                color: white;
+                border-radius: 5px;
+                padding: 10px;
                 font-size: 16px;
                 font-weight: bold;
             }
@@ -236,20 +237,21 @@ class InterfaceApp(QMainWindow):
                 background-color: rgba(0, 0, 0, 120);  /* Opacidade aumentada ao passar o mouse */
             }
             QPushButton:pressed {
-                background-color: rgba(0, 0, 0, 240);  
+                background-color: rgba(0, 0, 0, 240);
             }
         """)
-        comecar_button.clicked.connect(self.show_quiz_screen)  # Redireciona para a tela do quiz
+        comecar_button.clicked.connect(
+            self.show_quiz_screen)  # Redireciona para a tela do quiz
         layout.addWidget(comecar_button)
 
         # Botão "Ver Desempenho Completo"
         desempenho_button = QPushButton("Ver Desempenho Completo")
         desempenho_button.setStyleSheet("""
             QPushButton {
-                background-color: rgba(0, 0, 0, 60);  
-                color: white; 
-                border-radius: 5px; 
-                padding: 10px; 
+                background-color: rgba(0, 0, 0, 60);
+                color: white;
+                border-radius: 5px;
+                padding: 10px;
                 font-size: 16px;
                 font-weight: bold;
             }
@@ -257,20 +259,21 @@ class InterfaceApp(QMainWindow):
                 background-color: rgba(0, 0, 0, 120);  /* Opacidade aumentada ao passar o mouse */
             }
             QPushButton:pressed {
-                background-color: rgba(0, 0, 0, 240);  
+                background-color: rgba(0, 0, 0, 240);
             }
         """)
-        desempenho_button.clicked.connect(self.show_desempenho_screen)  # Redireciona para a tela de desempenho
+        desempenho_button.clicked.connect(
+            self.show_desempenho_screen)  # Redireciona para a tela de desempenho
         layout.addWidget(desempenho_button)
 
         # Botão "Sair"
         sair_button = QPushButton("Sair")
         sair_button.setStyleSheet("""
             QPushButton {
-                background-color: rgba(0, 0, 0, 60);  
-                color: white; 
-                border-radius: 5px; 
-                padding: 10px; 
+                background-color: rgba(0, 0, 0, 60);
+                color: white;
+                border-radius: 5px;
+                padding: 10px;
                 font-size: 16px;
                 font-weight: bold;
             }
@@ -278,10 +281,11 @@ class InterfaceApp(QMainWindow):
                 background-color: rgba(0, 0, 0, 120);  /* Opacidade aumentada ao passar o mouse */
             }
             QPushButton:pressed {
-                background-color: rgba(0, 0, 0, 240);  
+                background-color: rgba(0, 0, 0, 240);
             }
         """)
-        sair_button.clicked.connect(self.show_login_screen)  # Redireciona para a tela de login
+        sair_button.clicked.connect(
+            self.show_login_screen)  # Redireciona para a tela de login
         layout.addWidget(sair_button)
 
         screen.setLayout(layout)
@@ -318,11 +322,11 @@ class InterfaceApp(QMainWindow):
         self.nome_entry = QLineEdit()
         self.nome_entry.setPlaceholderText("Nome")
         self.nome_entry.setStyleSheet("""
-            background-color: rgba(255, 255, 255, 80);  
-            color: white;  
-            border: 1px solid white;  
-            border-radius: 5px; 
-            padding: 10px; 
+            background-color: rgba(255, 255, 255, 80);
+            color: white;
+            border: 1px solid white;
+            border-radius: 5px;
+            padding: 10px;
             font-weight: bold;
         """)
         frame_layout.addWidget(self.nome_entry)
@@ -331,11 +335,11 @@ class InterfaceApp(QMainWindow):
         self.email_cadastro_entry = QLineEdit()
         self.email_cadastro_entry.setPlaceholderText("Email")
         self.email_cadastro_entry.setStyleSheet("""
-            background-color: rgba(255, 255, 255, 80);  
-            color: white;  
-            border: 1px solid white;  
-            border-radius: 5px; 
-            padding: 10px; 
+            background-color: rgba(255, 255, 255, 80);
+            color: white;
+            border: 1px solid white;
+            border-radius: 5px;
+            padding: 10px;
             font-weight: bold;
         """)
         frame_layout.addWidget(self.email_cadastro_entry)
@@ -345,11 +349,11 @@ class InterfaceApp(QMainWindow):
         self.senha_cadastro_entry.setPlaceholderText("Senha")
         self.senha_cadastro_entry.setEchoMode(QLineEdit.Password)
         self.senha_cadastro_entry.setStyleSheet("""
-            background-color: rgba(255, 255, 255, 80);  
-            color: white;  
-            border: 1px solid white;  
-            border-radius: 5px; 
-            padding: 10px; 
+            background-color: rgba(255, 255, 255, 80);
+            color: white;
+            border: 1px solid white;
+            border-radius: 5px;
+            padding: 10px;
             font-weight: bold;
         """)
         frame_layout.addWidget(self.senha_cadastro_entry)
@@ -358,17 +362,17 @@ class InterfaceApp(QMainWindow):
         confirmar_button = QPushButton("Confirmar")
         confirmar_button.setStyleSheet("""
             QPushButton {
-                background-color: rgba(0, 0, 0, 60);  
-                color: white; 
-                border-radius: 5px; 
-                padding: 10px; 
+                background-color: rgba(0, 0, 0, 60);
+                color: white;
+                border-radius: 5px;
+                padding: 10px;
                 font-weight: bold;
             }
             QPushButton:hover {
                 background-color: rgba(0, 0, 0, 120);  /* Opacidade aumentada ao passar o mouse */
             }
             QPushButton:pressed {
-                background-color: rgba(0, 0, 0, 240);  
+                background-color: rgba(0, 0, 0, 240);
             }
         """)
         confirmar_button.clicked.connect(self.confirmar_cadastro)
@@ -378,17 +382,17 @@ class InterfaceApp(QMainWindow):
         voltar_button = QPushButton("Voltar")
         voltar_button.setStyleSheet("""
             QPushButton {
-                background-color: rgba(0, 0, 0, 60);  
-                color: white; 
-                border-radius: 5px; 
-                padding: 10px; 
+                background-color: rgba(0, 0, 0, 60);
+                color: white;
+                border-radius: 5px;
+                padding: 10px;
                 font-weight: bold;
             }
             QPushButton:hover {
                 background-color: rgba(0, 0, 0, 120);  /* Opacidade aumentada ao passar o mouse */
             }
             QPushButton:pressed {
-                background-color: rgba(0, 0, 0, 240);  
+                background-color: rgba(0, 0, 0, 240);
             }
         """)
         voltar_button.clicked.connect(self.show_login_screen)
@@ -402,29 +406,165 @@ class InterfaceApp(QMainWindow):
     def create_quiz_screen(self):
         """Cria a tela principal do quiz."""
         screen = QWidget()
-        layout = QVBoxLayout()
+        layout = QVBoxLayout(screen)
 
-        # Label para exibir a imagem da questão
+        # Cria um QFrame semi-transparente para o fundo
+        background_frame = QFrame()
+        background_frame.setStyleSheet("""
+            background-color: rgba(0, 0, 0, 80);  /* Preto com 60% de opacidade */
+            border-radius: 15px;
+        """)
+        background_frame.setFixedSize(800, 675)  # Tamanho do frame
+        background_layout = QVBoxLayout(background_frame)
+        background_layout.setAlignment(Qt.AlignCenter)
+        background_layout.setSpacing(2)
+
+        # Área para exibir a imagem da questão
         self.image_label = QLabel()
         self.image_label.setAlignment(Qt.AlignCenter)
-        layout.addWidget(self.image_label)
+        self.image_label.setStyleSheet("""
+            background-color: rgba(255, 255, 255, 80);  /* Fundo semi-transparente */
+            border: 1px solid white;
+            border-radius: 10px;
+            padding: 10px;
+        """)
+        self.image_label.setFixedSize(750, 450)  #
+        background_layout.addWidget(self.image_label)
+
+        # Adiciona um espaçamento entre a imagem e as informações da prova
+        background_layout.addSpacing(5)
+
+        # Área para exibir as informações da prova
+        info_frame = QFrame()
+        info_frame.setStyleSheet("""
+            background-color: rgba(255, 255, 255, 80);  /* Preto com 40% de opacidade */
+            border: 1px solid white;
+            border-radius: 10px;
+            padding: 5px;
+        """)
+        info_layout = QHBoxLayout(info_frame)
+        info_layout.setSpacing(10)  # Espaçamento entre os labels
+        info_layout.setContentsMargins(2, 2, 2, 2)  # Margens internas
+
+        # Labels para exibir as informações da prova
+        self.banca_label = QLabel("Banca: ")
+        self.banca_label.setStyleSheet("""
+            color: rgba(0, 0, 0, 120);
+            font-size: 14px;  /* Aumentei o tamanho da fonte */
+            font-weight: bold;
+        """)
+        info_layout.addWidget(self.banca_label)
+
+        self.ano_label = QLabel("Ano: ")
+        self.ano_label.setStyleSheet("""
+            color: rgba(0, 0, 0, 120);
+            font-size: 14px;  /* Aumentei o tamanho da fonte */
+            font-weight: bold;
+        """)
+        info_layout.addWidget(self.ano_label)
+
+        self.infor_label = QLabel("")
+        self.infor_label.setStyleSheet("""
+            color: rgba(0, 0, 0, 120);
+            font-size: 14px;  /* Aumentei o tamanho da fonte */
+            font-weight: bold;
+        """)
+        info_layout.addWidget(self.infor_label)
+
+        background_layout.addWidget(info_frame)
+
+        # Adiciona um espaçamento entre as informações da prova e os botões de alternativas
+        background_layout.addSpacing(5)
 
         # Frame para os botões de alternativas
-        buttons_layout = QHBoxLayout()
+        buttons_frame = QFrame()
+        buttons_frame.setStyleSheet("""
+            background-color: rgba(255, 255, 255, 80);  /* Preto com 40% de opacidade */
+            border: 1px solid white;
+            border-radius: 10px;
+            padding: 5px;
+        """)
+        buttons_layout = QHBoxLayout(buttons_frame)
         self.buttons = []
         for option in ["A", "B", "C", "D", "E"]:
             button = QPushButton(option)
             button.setFixedSize(100, 50)
+            button.setStyleSheet("""
+                QPushButton {
+                    background-color: rgba(255, 255, 255, 80);  /* Fundo branco semi-transparente */
+                    color: rgba(0, 0, 0, 160);  /* Texto preto */
+                    border-radius: 5px;
+                    font-size: 16px;
+                    font-weight: bold;
+                }
+                QPushButton:hover {
+                    background-color: rgba(255, 255, 255, 160);  /* Fundo mais claro ao passar o mouse */
+                }
+                QPushButton:pressed {
+                    background-color: rgba(0, 0, 0, 200);  /* Fundo mais escuro ao clicar */
+                    color: rgba(255, 255, 255, 160);  /* Texto preto */
+                }
+            """)
             button.clicked.connect(
                 lambda _, o=option: self.check_answer(o))
             buttons_layout.addWidget(button)
             self.buttons.append(button)
-        layout.addLayout(buttons_layout)
+        background_layout.addWidget(buttons_frame)
+
+        # Adiciona um espaçamento entre os botões de alternativas e os botões de menu
+        background_layout.addSpacing(20)
+
+        # Layout horizontal para os botões "Ver Desempenho" e "Voltar ao Menu"
+        menu_buttons_layout = QHBoxLayout()
 
         # Botão para ver desempenho
         self.desempenho_button = QPushButton("Ver Desempenho")
+        self.desempenho_button.setStyleSheet("""
+            QPushButton {
+                background-color: rgba(0, 0, 0, 80);
+                color: white;
+                border-radius: 5px;
+                padding: 10px;
+                font-size: 16px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: rgba(0, 0, 0, 160);  /* Opacidade aumentada ao passar o mouse */
+            }
+            QPushButton:pressed {
+                background-color: rgba(255, 255, 255, 160);
+                color: black;
+            }
+        """)
         self.desempenho_button.clicked.connect(self.mostrar_desempenho)
-        layout.addWidget(self.desempenho_button)
+        menu_buttons_layout.addWidget(self.desempenho_button)
+
+        # Botão para voltar ao menu inicial
+        voltar_menu_button = QPushButton("Voltar ao Menu")
+        voltar_menu_button.setStyleSheet("""
+             QPushButton {
+                background-color: rgba(0, 0, 0, 80);
+                color: white;
+                border-radius: 5px;
+                padding: 10px;
+                font-size: 16px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: rgba(0, 0, 0, 160);  /* Opacidade aumentada ao passar o mouse */
+            }
+            QPushButton:pressed {
+                background-color: rgba(255, 255, 255, 160);
+                color: black;
+            }
+        """)
+        voltar_menu_button.clicked.connect(self.show_intermediate_screen)
+        menu_buttons_layout.addWidget(voltar_menu_button)
+
+        background_layout.addLayout(menu_buttons_layout)
+
+        # Adiciona o frame semi-transparente ao layout principal
+        layout.addWidget(background_frame, alignment=Qt.AlignCenter)
 
         screen.setLayout(layout)
         return screen
@@ -455,7 +595,7 @@ class InterfaceApp(QMainWindow):
 
     def show_intermediate_screen(self):
         """Mostra a tela intermediária após o login."""
-        print("idddddddddddddddddddddddddddd...",self.id_usuario)
+        print("idddddddddddddddddddddddddddd...", self.id_usuario)
         self.stacked_widget.setCurrentIndex(1)  # Índice da tela intermediária
 
     def show_cadastro_screen(self):
@@ -468,8 +608,14 @@ class InterfaceApp(QMainWindow):
         self.iniciar_quiz()
 
     def show_desempenho_screen(self):
-        """Mostra a tela de desempenho."""
-        self.stacked_widget.setCurrentIndex(4)
+        """Mostra a tela de desempenho e atualiza o desempenho."""
+        if self.id_usuario:
+            desempenho = self.intermediary_manager.calcular_desempenho(
+                self.id_usuario)
+            self.desempenho_label.setText(desempenho)
+        else:
+            self.desempenho_label.setText("Usuário não autenticado.")
+        self.stacked_widget.setCurrentIndex(4)  # Índice da tela de desempenho
 
     def verificar_autenticacao(self):
         """Verifica se o usuário está autenticado."""
@@ -477,8 +623,9 @@ class InterfaceApp(QMainWindow):
         senha = self.senha_entry.text()
         self.id_usuario = self.intermediary_manager.autenticar_usuario(
             email, senha)
-        print("idddddddddddddddddddddddddddddddddddddddddddddd...",self.id_usuario)
+        print("idddddddddddddddddddddddddddddddddddddddddddddd...", self.id_usuario)
         if self.id_usuario:
+            self.atualizar_resumo_desempenho()
             self.show_intermediate_screen()  # Redireciona para a tela intermediária
         else:
             QMessageBox.critical(self, "Erro", "Email ou senha incorretos.")
@@ -534,6 +681,7 @@ class InterfaceApp(QMainWindow):
     def display_question(self, question):
         """Exibe a questão na interface."""
         try:
+            # Exibe a imagem da questão
             image = Image.open(question.imagem)
             image = image.resize((600, 400), Image.Resampling.LANCZOS)
             image_bytes = BytesIO()
@@ -541,6 +689,24 @@ class InterfaceApp(QMainWindow):
             pixmap = QPixmap()
             pixmap.loadFromData(image_bytes.getvalue())
             self.image_label.setPixmap(pixmap)
+
+            # Busca as informações da prova usando o id_prova da questão
+            if question.id_prova:
+                prova = self.intermediary_manager.get_prova_by_id(
+                    question.id_prova)
+                if prova:
+                    self.banca_label.setText(f"Banca: {prova.banca}")
+                    self.ano_label.setText(f"Ano: {prova.ano}")
+                    self.infor_label.setText(f"Prova: {prova.infor}")
+                else:
+                    self.banca_label.setText("Banca: N/A")
+                    self.ano_label.setText("Ano: N/A")
+                    self.infor_label.setText("Prova: N/A")
+            else:
+                self.banca_label.setText("Banca: N/A")
+                self.ano_label.setText("Ano: N/A")
+                self.infor_label.setText("Prova: N/A")
+
         except Exception as e:
             QMessageBox.critical(
                 self, "Erro", f"Não foi possível carregar a imagem: {e}")
@@ -555,7 +721,6 @@ class InterfaceApp(QMainWindow):
             hora_atual = datetime.now()  # Data e hora atuais
             area_questao = self.current_question.area
 
-
             self.intermediary_manager.registrar_resposta(
                 self.id_usuario,
                 self.current_question.id_questao,
@@ -563,7 +728,6 @@ class InterfaceApp(QMainWindow):
                 hora_atual,
                 area_questao
             )
-
 
             if acerto_erro:
                 QMessageBox.information(self, "Resposta", "Correto!")
@@ -578,9 +742,11 @@ class InterfaceApp(QMainWindow):
 
     def mostrar_desempenho(self):
         """Mostra a tela de desempenho."""
+        print("def mostrar_desempenho(self)...", self.id_usuario)
         if self.id_usuario:
             desempenho = self.intermediary_manager.calcular_desempenho(
                 self.id_usuario)
+            print("def mostrar_desempenho(self)...", desempenho)
         else:
             desempenho = "Usuário não autenticado."
 
@@ -590,9 +756,11 @@ class InterfaceApp(QMainWindow):
     def atualizar_resumo_desempenho(self):
         """Atualiza o resumo de desempenho na tela intermediária."""
         if hasattr(self, 'resumo_label'):  # Verifica se o resumo_label já foi criado
+            print("if hasattr(self, 'resumo_label'):...")
             if self.id_usuario:
                 # Calcula o desempenho do usuário
-                desempenho = self.intermediary_manager.calcular_desempenho(self.id_usuario)
+                desempenho = self.intermediary_manager.calcular_desempenho(
+                    self.id_usuario)
                 self.resumo_label.setText(desempenho)
             else:
                 self.resumo_label.setText("Usuário não autenticado.")

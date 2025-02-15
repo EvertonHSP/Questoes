@@ -35,9 +35,6 @@ class IntermediaryManager:
                 "Erro ao carregar o modelo SentenceTransformer: %s", str(e))
             raise
 
-
-
-
     def calcular_desempenho(self, id_usuario):
         print("Processando def calcular_desempenho...", id_usuario)
         """Calcula o desempenho do usuário com base no histórico."""
@@ -49,7 +46,8 @@ class IntermediaryManager:
         total_acertos = sum(1 for h in historico if h.acerto == 1)
         total_erros = sum(1 for h in historico if h.erro == 1)
         total_respostas = total_acertos + total_erros
-        porcentagem_acertos = (total_acertos / total_respostas) * 100 if total_respostas > 0 else 0
+        porcentagem_acertos = (total_acertos / total_respostas) * \
+            100 if total_respostas > 0 else 0
 
         # Classificação geral
         if porcentagem_acertos >= 80:
@@ -72,12 +70,15 @@ class IntermediaryManager:
         # Calcula a porcentagem de acertos por área
         for area, dados in desempenho_por_area.items():
             total_area = dados["acertos"] + dados["erros"]
-            porcentagem_acertos_area = (dados["acertos"] / total_area) * 100 if total_area > 0 else 0
+            porcentagem_acertos_area = (
+                dados["acertos"] / total_area) * 100 if total_area > 0 else 0
             desempenho_por_area[area]["porcentagem_acertos"] = porcentagem_acertos_area
 
         # Encontra a área com melhor e pior desempenho
-        melhor_area = max(desempenho_por_area.items(), key=lambda x: x[1]["porcentagem_acertos"], default=None)
-        pior_area = min(desempenho_por_area.items(), key=lambda x: x[1]["porcentagem_acertos"], default=None)
+        melhor_area = max(desempenho_por_area.items(
+        ), key=lambda x: x[1]["porcentagem_acertos"], default=None)
+        pior_area = min(desempenho_por_area.items(),
+                        key=lambda x: x[1]["porcentagem_acertos"], default=None)
 
         # Formata a mensagem de desempenho
         nome_usuario = self.usuario_dao.get_user_by_id(id_usuario).nome
@@ -97,7 +98,6 @@ class IntermediaryManager:
             )
 
         return mensagem
-
 
     def gerar_embeddings(self, sentences):
         """Gera embeddings para uma lista de sentenças."""
@@ -195,11 +195,11 @@ class IntermediaryManager:
 
     def registrar_resposta(self, id_usuario, id_questao, acerto_erro, hora_atual, area_questao):
         erro = 1 - acerto_erro
-        print("def registrar_resposta...", id_usuario, id_questao, acerto_erro, hora_atual, erro)
+        print("def registrar_resposta...", id_usuario,
+              id_questao, acerto_erro, hora_atual, erro)
         self.historico_dao.add_historico(
             id_usuario, id_questao, acerto_erro, hora_atual, erro, area_questao
         )
-
 
     def adicionar_usuario(self, nome, email, senha):
         """Adiciona um novo usuário."""
@@ -227,19 +227,19 @@ class IntermediaryManager:
         """
         Sugere uma questão similar com base na área e no embedding da questão errada.
         """
-        #print(" 1. Obter o embedding da questão errada...")
+        # print(" 1. Obter o embedding da questão errada...")
         # 1. Obter o embedding da questão errada
         questao_errada_embedding = self.embedding_dao.get_embedding_by_questao(
             id_questao_atual)
         if questao_errada_embedding is None:
             return None, "Embedding da questão atual não encontrado."
 
-        #print("2. Obter embeddings das questões da mesma área...")
+        # print("2. Obter embeddings das questões da mesma área...")
         # 2. Obter embeddings das questões da mesma área
         embeddings_data = self.embedding_dao.get_embeddings_by_area(
             area_errada)
 
-        #print("3. Filtrar questões já sugeridas e a questão atual...")
+        # print("3. Filtrar questões já sugeridas e a questão atual...")
         # 3. Filtrar questões já sugeridas e a questão atual
         questoes_a_excluir = {id_questao_atual} | set(questoes_sugeridas)
 
@@ -252,7 +252,7 @@ class IntermediaryManager:
             if embedding.id_questao not in questoes_a_excluir
         ]
 
-        #print("# 4. Preparar os embeddings para cálculo de similaridade...")
+        # print("# 4. Preparar os embeddings para cálculo de similaridade...")
         # 5. Preparar os embeddings para cálculo de similaridade
         embeddings_array = np.array(
             [embedding.vetor for embedding in embeddings_data]  # Já é um array NumPy
@@ -266,14 +266,14 @@ class IntermediaryManager:
        # """ print("Forma de questao_errada_tensor:", questao_errada_tensor.shape)
         # print("Forma de embeddings_tensor:", embeddings_tensor.shape)"""
 
-        #print("5. Normalizar os embeddings...")
+        # print("5. Normalizar os embeddings...")
         # 6. Normalizar os embeddings
         questao_errada_tensor = torch.nn.functional.normalize(
             questao_errada_tensor, p=2, dim=1)
         embeddings_tensor = torch.nn.functional.normalize(
             embeddings_tensor, p=2, dim=1)
 
-        #print("6. Calcular similaridade do cosseno...")
+        # print("6. Calcular similaridade do cosseno...")
 
         try:
             similaridades = torch.nn.functional.cosine_similarity(
@@ -282,7 +282,7 @@ class IntermediaryManager:
 
             print("Similaridades calculadas:", similaridades)
 
-            #print("7. Encontrar a questão mais similar...")
+            # print("7. Encontrar a questão mais similar...")
 
             # 8. Encontrar a questão mais similar
             indice_mais_similar = similaridades.argmax().item()
@@ -295,7 +295,7 @@ class IntermediaryManager:
             if not questao_sugerida:
                 return None, "Questão sugerida não encontrada."
 
-            #print("return id_similar, questao_sugerida...")
+            # print("return id_similar, questao_sugerida...")
 
             return id_similar, questao_sugerida
 
@@ -303,4 +303,5 @@ class IntermediaryManager:
             print(f"Erro durante o cálculo de similaridade: {e}")
             return None
 
-#
+    def get_prova_by_id(self, id_prova):
+        return self.prova_dao.get_prova_by_id(id_prova)
